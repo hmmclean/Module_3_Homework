@@ -55,6 +55,8 @@ rad_percent = format((total_rad_votes/total_num_votes), ".0%")
 
 # Populate dictionary to associate winner name and total votes
 vote_candidate = dict([(total_ccs_votes, candidates[0]), (total_dg_votes, candidates[1]), (total_rad_votes, candidates[2])])
+
+# Determining highest total votes
 max_votes = max(total_ccs_votes,total_dg_votes,total_rad_votes)
 
 
@@ -73,8 +75,6 @@ output += "--------------------\n"
 
 with open(output_path, 'w') as output_file:
     output_file.write(output)
-
-print(output)
    
 
 # Final Output to Terminal
