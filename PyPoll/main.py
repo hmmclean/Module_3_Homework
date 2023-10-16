@@ -47,46 +47,44 @@ with open(election_csv) as csvfile:
             candidate == "Raymon Anthony Doane"
             total_rad_votes += 1
 
-# Calculate candidate percentage
-ccs_percent = total_ccs_votes/total_num_votes
-dg_percent = total_dg_votes/total_num_votes
-rad_percent = total_rad_votes/total_num_votes
+# Calculate candidate vote percentage
+ccs_percent = format((total_ccs_votes/total_num_votes), ".0%")
+dg_percent = format((total_dg_votes/total_num_votes), ".0%")
+rad_percent = format((total_rad_votes/total_num_votes), ".0%")
 
-# Winner
-winner = max(ccs_percent,dg_percent,rad_percent)
 
-print(total_ccs_votes)
-print(total_dg_votes)
-print(total_rad_votes)
-
-print(format(ccs_percent, ".0%"))
-print(format(dg_percent, ".0%"))
-print(format(rad_percent, ".0%"))
-
-print(winner)
-
+# Populate dictionary to associate winner name and total votes
+vote_candidate = dict([(total_ccs_votes, candidates[0]), (total_dg_votes, candidates[1]), (total_rad_votes, candidates[2])])
+max_votes = max(total_ccs_votes,total_dg_votes,total_rad_votes)
 
 
 # Writing to txt
-#with open('PyPoll.txt', 'w', encoding='utf-8') as f:
-    #f.write(PyPoll)
-    #f.write("Election Results\n")
-    #f.write("--------------------\n")
-    #f.write(f"Total Votes: total_num_votes\n")
-    #f.write("--------------------\n")
-    #f.write(f"List of candidates\n")
-    #f.write("--------------------\n")
-    #f.write(f"Winner: \n")
-    #f.write("--------------------\n")
+output_path = os.path.join("Analysis", "PyPoll_Analysis.txt")
+output = "Election Results\n"
+output += "--------------------\n"
+output += f"Total Votes: {total_num_votes}\n"
+output += "--------------------\n"
+output += f"{candidates[0]}: {ccs_percent} ({total_ccs_votes})\n"
+output += f"{candidates[1]}: {dg_percent} ({total_dg_votes})\n"
+output += f"{candidates[2]}: {rad_percent} ({total_rad_votes})\n"
+output += "--------------------\n"
+output += f"Winner: {vote_candidate[max_votes]}\n"
+output += "--------------------\n"
 
+with open(output_path, 'w') as output_file:
+    output_file.write(output)
 
+print(output)
+   
 
 # Final Output to Terminal
 print("Election Results")
 print("--------------------")
 print("Total Votes: ", total_num_votes)
 print("--------------------")
-print("List of candidates: ", candidates)
+print(f"{candidates[0]}: {ccs_percent} ({total_ccs_votes})")
+print(f"{candidates[1]}: {dg_percent} ({total_dg_votes})")
+print(f"{candidates[2]}: {rad_percent} ({total_rad_votes})")
 print("--------------------")
-print("Winner: ")
+print("Winner: ", vote_candidate[max_votes])
 print("--------------------")
