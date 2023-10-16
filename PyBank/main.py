@@ -1,22 +1,20 @@
 # Importing modules
 import os
 import csv
-import statistics
-from statistics import mean
 
-
-#
+# Variable to hold csv location
 budget_csv = os.path.join("Resources", "budget_data.csv")
 
 # Variables
 date = []
 total = 0
-average_change = 0
-great_inc_profit = []
-great_dec_profit = []
 total_month = {}
-
-
+previous = None
+average_change = []
+great_inc = 0
+great_inc_row = None
+great_dec = 0
+great_dec_row = None
 
 # with open as csvfile:
 with open(budget_csv) as csvfile:
@@ -43,46 +41,48 @@ with open(budget_csv) as csvfile:
             total_month[months] += 1
         else: 
             total_month[months] = 1
-    total_month = sum(total_month.values())
-    print(total_month)
-
-    print(total)
-    #Create a dictionary aligning the month and the values from row1 to then do the calcs for avg change
-
-
     
+        # Calculate change in profit and losses
+        if row and row[1]:
+            current = int(row[1])
+            if previous is not None:
+                change = current - previous
+                average_change.append(change)
+                
+                # Calculate greatest increase and decrease in profits
+                if change > great_inc:
+                    great_inc = change
+                    great_inc_row = row
+                elif change < great_dec:
+                    great_dec = change
+                    great_dec_row = row        
+            previous = current
 
-    
-       
-       
+# Sum total entries   
+total_month = sum(total_month.values())
 
-# Calculations
-#Avg_Change = (Feb-Jan, + Mar-Feb + etc...)/total_months
-
-
-
-# PL calc
-# greatest increase and greatest decrease
+# Calculate average change
+if len(average_change) > 0:
+    average = sum(average_change) / len(average_change)
 
 # Writing to txt
-#output_path = os.path.join("Analysis", "PyBank_Analysis.txt")
-#output = "Financial Analysis\n"
-#output += "------------------------\n"
-#output += f"Total Months: {total_month}\n"
-#output += f"Total: {total}\n"
-#output += f"Average Change: ${round(Avg_Change, 2)}\n"
-#output += f"Greatest Increase in Profits: Month (Profit)\n"
-#output += f"Greatest Decrease in Profits: Month (Loss)\n"
+output_path = os.path.join("Analysis", "PyBank_Analysis.txt")
+output = "Financial Analysis\n"
+output += "------------------------\n"
+output += f"Total Months: {total_month}\n"
+output += f"Total: ${total}\n"
+output += f"Average Change: ${round(average, 2)}\n"
+output += f"Greatest Increase in Profits: {great_inc_row[0]} (${great_inc})\n"
+output += f"Greatest Decrease in Profits: {great_dec_row[0]} (${great_dec})\n"
 
-#with open(output_path, 'w') as output_file:
-    #output_file.write(output)
+with open(output_path, 'w') as output_file:
+    output_file.write(output)
    
-
-#Final Output to Terminal
-#print("Financial Analysis")
-#print("------------------------")
-#print(f"Total Months: {total_month}")
-#print(f"Total: {total})
-#print(f"Average Change: ${round(Avg_Change, 2)}")
-#print(f"Greatest Increase in Profits: Month (Profit)")
-#print(f"Greatest Decrease in Profits: Month (Loss)")
+# Final Output to Terminal
+print("Financial Analysis")
+print("------------------------")
+print(f"Total Months: {total_month}")
+print(f"Total: ${total}")
+print(f"Average Change: ${round(average, 2)}")
+print(f"Greatest Increase in Profits: {great_inc_row[0]} (${great_inc})")
+print(f"Greatest Decrease in Profits: {great_dec_row[0]} (${great_dec})")
