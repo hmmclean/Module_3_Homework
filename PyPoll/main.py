@@ -37,14 +37,14 @@ with open(election_csv) as csvfile:
             candidates.append(candidate)
 
         # Calculate candidate total number of votes
-        if candidate == "Charles Casper Stockham":
+        if candidate == candidates[0]:
             total_ccs_votes += 1
             
-        elif candidate == "Diana DeGette":
+        elif candidate == candidates[1]:
             total_dg_votes += 1
         
         else: 
-            candidate == "Raymon Anthony Doane"
+            candidate == candidates[2]
             total_rad_votes += 1
 
 # Calculate candidate vote percentage
